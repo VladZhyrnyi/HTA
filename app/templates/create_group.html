@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Create Group</h1>
+    <form style="border:2">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.groupname.label }}<br>
+            {{ form.groupname(size=32) }}
+            {% for error in form.groupname.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}

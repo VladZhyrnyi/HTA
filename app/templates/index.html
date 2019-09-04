@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+{% if current_user.is_authenticated %}
+<div class="container-fluid">
+    <div class="row">
+        <article>
+            <h1>
+                You are in!
+            </h1>
+        </article>
+    </div>
+</div>
+{% else %}
+<div class="container-fluid">
+    <div class="jumbotron text-center">
+        <h1>
+          Welcome to HTA
+        </h1>
+        <p>
+          You need <a href="{{url_for('auth.login')}}">login</a> to use our service. Or <a href="{{url_for('auth.signup')}}">sign up</a> if you come here for first time.
+        </p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

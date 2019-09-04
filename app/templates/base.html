@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- Latest compiled and minified CSS -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+      <!-- Optional theme -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+      <!-- Latest compiled and minified JavaScript -->
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+      {% if title %}
+      <title>{{title}} - HTA</title>
+      {% else %}
+      <title>HTA</title>
+      {% endif %}
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="#" class="navbar-brand">HTA</a>
+            </div>
+            
+            <div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="{{ url_for('main.index') }}"> HOME </a></li>
+                    {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('main.create_task') }}"> Create Task</a></li>
+                    <li><a href="{{ url_for('main.create_group') }}">Create Group</a></li>
+                    <li><a href="{{ url_for('main.mytask_list')}}">My tasks</a></li>
+                    <li><a href="{{ url_for('auth.logout') }}">Log out</a></li>
+                    {% endif %}
+                    {% if not current_user.is_authenticated %}
+                    <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                    <li><a href="{{ url_for('auth.signup') }}">Sign up</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section>
+        <div class="container-fluid">
+            {% block content %}{% endblock %}
+        </div>
+    </section>
+    <div class="conteiner-fluid text-center">
+        <p>All rights reserved.</p>
+    </div>
+  </body>
+</html>
