@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="jumbotron text-center">
-        <h1 class="title">
-            Wellcome, {{ name }}!
-        </h1>
-    </div>
+    {% for task in tasks %}
+        <article>
+          <div>
+            <div>
+              <a href="#">{{ task.author.username }}</a>
+              <small>{{ task.timestamp.strftime('%Y-%m-%d') }}</small>
+            </div>
+            <h2><a href="{{ url_for('main.task', task_id=task.id) }}">{{ task.title }}</a></h2>
+            <p>{{ task.task_text }}</p>
+          </div>
+        </article>
+    {% endfor %}
 {% endblock %}

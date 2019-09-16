@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Create Group</h1>
-    <form style="border:2">
+    <form action="/crt_grp" style="border:2" method="POST">
         {{ form.hidden_tag() }}
         <p>
             {{ form.groupname.label }}<br>
