@@ -2,6 +2,11 @@ from app import db
 from datetime import datetime
 from flask_login import UserMixin
 
+members = db.Table('members',
+                   db.Column('user_id', db.Integer, db.ForeignKey('Users.id')),
+                   db.Column('group_id', db.Integer, db.ForeignKey('Groups.id'))
+                   )
+
 
 class User(db.Model, UserMixin):
 
@@ -11,11 +16,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password = db.Column(db.String(200))
-
-    def __init__(self, username, email, password):
-        self.username = username
-        self.email = email
-        self.password = password
+    members = db.relationship('Group', secondary=members, backref=db.backref('members', lazy='dynamic'))
 
 
 class Group(db.Model):
@@ -26,9 +27,8 @@ class Group(db.Model):
     groupname = db.Column(db.String(30), nullable=False)
     group_admin = db.Column(db.Integer, db.ForeignKey('Users.id'))
 
-    def __init__(self, groupname, group_admin):
-        self.groupname = groupname
-        self.group_admin = group_admin
+    def __repr__(self):
+        return f'{self.groupname}'
 
 
 class Task(db.Model):
@@ -39,19 +39,10 @@ class Task(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('Users.id'))
     executor_id = db.Column(db.String(120))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    for_group = db.Column(db.Integer, db.ForeignKey('Groups.id'))
     priority = db. Column(db.Integer, nullable=False)
     status = db.Column(db.String(64))
     title = db.Column(db.String(64), nullable=False)
     task_text = db.Column(db.String(140), nullable=False)
-
-    def __init__(self, author_id, executor_id, timestamp, priority, status, title, task_text):
-        self.author_id = author_id
-        self.executor_id = executor_id
-        self.timestamp = timestamp
-        self.priority = priority
-        self.status = status
-        self.title = title
-        self.task_text = task_text
-
-    def __repr__(self):
-        return f'{str.capitalize(self.title)} : {self.task_text}.'
+    author = db.relationship('User', backref=db.backref('Tasks', lazy=True))
+    group = db.relationship('Group', backref=db.backref('Tasks', lazy=True))

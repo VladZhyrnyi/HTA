@@ -19,7 +19,6 @@ def create_app():
 
     from .models import User
 
-
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
@@ -42,4 +41,3 @@ def create_app():
 # priors = ['low', 'medium', 'high']
 #
 # create_priorities(priors)
-

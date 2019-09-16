@@ -14,7 +14,7 @@
         </p>
         <p>
             {{ form.text.label }}<br>
-            {{ form.text(size=256, rows=5, cols=32) }}
+            {{ form.text(size=256, rows=4, cols=32) }}
              {% for error in form.text.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
@@ -28,7 +28,7 @@
         </p>
         <p>
             {{ form.priority.label }}<br>
-            {{ form.priority(size=32) }}
+            {{ form.priority() }}
              {% for error in form.priority.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
