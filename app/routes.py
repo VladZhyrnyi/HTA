@@ -1,14 +1,12 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request, abort
 from .forms import TaskForm, CreateGroup
-from .models import Group, Task, User
+from .models import Group, Task, User, Status
 from flask_login import current_user, login_required
 from datetime import datetime
 from app import db
 
-
 main = Blueprint('main', __name__)
 
-# current_group = Group.query.filter_by(group_id=current_user.id).firts()
 
 @main.route('/')
 @main.route('/index')
@@ -35,15 +33,15 @@ def create_task():
         executor = form.executor.data
         priority = form.priority.data
 
-        task = Task(author_id=current_user.id,
-                    executor_id=executor,
-                    timestamp=datetime.utcnow(),
-                    # for_group=current_group.id,
-                    priority=priority,
-                    status=None,
-                    title=title,
-                    task_text=text)
-        db.session.add(task)
+        new_task = Task(author_id=current_user.id,
+                        executor_id=executor,
+                        timestamp=datetime.utcnow(),
+                        # group=current_user.default_group,
+                        priority_id=priority.id,
+                        status_id=1,
+                        title=title,
+                        task_text=text)
+        db.session.add(new_task)
         db.session.commit()
 
         flash('Task successfully created!')
@@ -88,12 +86,6 @@ def delete_task(task_id):
     db.session.commit()
     flash('Your task has been deleted!', 'success')
     return redirect(url_for('main.profile'))
-
-# @main.route('/tsklst', methods=['GET', 'POST'])
-# @login_required
-# def mytask_list():
-#     tasklist = Task.query.filter_by(author_id=current_user.id).all()
-#     return render_template('tasklist.html', title='Tasklist', list=tasklist)
 
 
 @main.route('/crt_grp', methods=['GET', 'POST'])

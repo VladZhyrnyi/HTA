@@ -1,5 +1,5 @@
-from app import db, create_app
+from app import app
 
-db.create_all(app=create_app())
 
-create_app().run(debug=True)
+app.run(debug=True)
+
