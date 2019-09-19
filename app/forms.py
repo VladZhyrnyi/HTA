@@ -1,7 +1,8 @@
-from .models import User
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, EqualTo, Email
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from .appfuncs import priority_query
 
 
 class LoginForm(FlaskForm):
@@ -24,9 +25,12 @@ class CreateGroup(FlaskForm):
     submit = SubmitField('Create')
 
 
+
+
+
 class TaskForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     text = TextAreaField('Input text of task..', validators=[DataRequired()])
     executor = StringField('Executor')
-    priority = SelectField('Priority', choices=[('1', 'Low'), ('2', 'Medium'), ('3', 'High')])
+    priority = QuerySelectField('Priority', query_factory=priority_query, allow_blank=True)
     submit = SubmitField('Create')

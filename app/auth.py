@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.urls import url_parse
 from .models import User
 from app import db
 
@@ -23,10 +22,6 @@ def login_post():
 
     if user and check_password_hash(user.password, password):
         login_user(user, remember=remember)
-        # next_page = request.args.get('next')
-        # if not next_page or url_parse(next_page).netloc != '':
-        #     next_page = url_for('main.profile')
-        # return redirect(next_page)
         return redirect(url_for('main.profile'))
 
     flash('Please check your login details and try again')
