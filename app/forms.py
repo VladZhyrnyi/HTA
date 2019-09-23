@@ -32,5 +32,5 @@ class TaskForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     text = TextAreaField('Input text of task..', validators=[DataRequired()])
     executor = StringField('Executor')
-    priority = QuerySelectField('Priority', query_factory=priority_query, allow_blank=True)
+    priority = QuerySelectField('Priority', query_factory=priority_query, allow_blank=False)
     submit = SubmitField('Create')
