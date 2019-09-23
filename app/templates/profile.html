@@ -10,8 +10,8 @@
             </div>
             <h2><a href="{{ url_for('main.task', task_id=task.id) }}">{{ task.title }}</a></h2>
             <p>{{ task.task_text }}</p>
-            <p>Priority: {{ task.priority }}</p>
-            <p>Status: {{ task.status }}</p>
+            <p><small>Priority: {{ task.priority }}</small></p>
+            <p><small>Status: {{ task.status }}</small></p>
           </div>
         </article>
     {% endfor %}

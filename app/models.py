@@ -17,7 +17,8 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), index=True, unique=True)
     password = db.Column(db.String(200))
     tasks = db.relationship('Task', backref='author', lazy=True)
-    # default_group = db.Column(db.Integer, db.ForeignKey('groups.id'))
+    # default_group_id = db.Column(db.Integer, db.ForeignKey('groups.id'))
+    # default_group = db.relationship('Group', foreign_keys=[default_group_id])
     # members = db.relationship('Group', secondary=members, backref=db.backref('members', lazy='dynamic'))
 
 
@@ -31,6 +32,7 @@ class Group(db.Model):
     members = db.relationship('User', secondary=members, lazy='subquery',
                               backref=db.backref('groups', lazy=True))
     tasks = db.relationship('Task', backref='for_group')
+    # default = db.relationship('User', backref='default_group', lazy=True)
 
     def __repr__(self):
         return f'{self.groupname}'
