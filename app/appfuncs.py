@@ -1,5 +1,6 @@
-from .models import Priority, Status
+from .models import Priority, Status, Group, User
 from app import db
+from flask_login import current_user
 
 
 def add_standart_values():
@@ -20,3 +21,11 @@ def priority_query():
 
 def status_query():
     return Status.query.all()
+
+
+def choose_group():
+    return Group.query.filter(Group.members_id.any(id=current_user.id)).all()
+
+
+def group_members():
+    return User.query.filter(User.members.any(id=current_user.default_group_id)).all()

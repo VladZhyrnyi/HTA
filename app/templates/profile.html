@@ -10,8 +10,12 @@
             </div>
             <h2><a href="{{ url_for('main.task', task_id=task.id) }}">{{ task.title }}</a></h2>
             <p>{{ task.task_text }}</p>
+            {% if current_user.default_group_id %}
+              <p><small>Executor: {{task.executor}}</small></p>
+            {% endif %}
             <p><small>Priority: {{ task.priority }}</small></p>
             <p><small>Status: {{ task.status }}</small></p>
+            <br>
           </div>
         </article>
     {% endfor %}

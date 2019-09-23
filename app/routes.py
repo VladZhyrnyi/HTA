@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request, abort
-from .forms import TaskForm, CreateGroup
-from .models import Group, Task, User, Status
+from .forms import TaskForm, CreateGroup, ChangeGroup
+from .models import Group, Task, User
 from flask_login import current_user, login_required
 from datetime import datetime
 from app import db
@@ -19,7 +19,10 @@ def index():
 @main.route('/profile')
 @login_required
 def profile():
-    tasks = Task.query.all()
+    if current_user.default_group_id:
+        tasks = Task.query.filter_by(group=current_user.default_group_id).all()
+    else:
+        tasks = Task.query.filter_by(author=current_user)
     return render_template('profile.html', tasks=tasks)
 
 
@@ -30,13 +33,13 @@ def create_task():
     if form.validate_on_submit():
         title = form.title.data
         text = form.text.data
-        executor = form.executor.data
+        executor = User.query.filter_by(username=str(form.executor.data)).first()
         priority = form.priority.data
 
         new_task = Task(author_id=current_user.id,
-                        executor_id=executor,
+                        executor_id=executor.id,
                         timestamp=datetime.utcnow(),
-                        # group=current_user.default_group,
+                        group=current_user.default_group_id,
                         priority_id=priority.id,
                         status_id=1,
                         title=title,
@@ -98,20 +101,49 @@ def create_group():
             groupname = form.groupname.data
 
             group = Group.query.filter_by(groupname=groupname).first()
+            user = User.query.get(current_user.id)
 
             if not group:
                 new_group = Group(groupname=groupname, group_admin=admin)
                 db.session.add(new_group)
                 new_group.members.append(User.query.get(current_user.id))
                 db.session.commit()
+                user.default_group_id = new_group.id
+            db.session.commit()
             return redirect(url_for('main.my_groups'))
     return render_template('create_group.html', title='Create group', form=form)
 
 
-@main.route('/myGroups', methods=['POST', 'GET'])
+@main.route('/change_group', methods=['POST', 'GET'])
 @login_required
-def my_groups():
-    grouplist = Group.query.all()
-    return render_template('grouplist.html', title='My Groups', list=grouplist)
+def change_group():
+    form = ChangeGroup()
+    if form.validate_on_submit():
+        if not form.group.data:
+            current_user.default_group_id = None
+        else:
+            group = Group.query.filter_by(groupname=str(form.group.data)).first()
+            current_user.default_group_id = group.id
+        db.session.commit()
+        return redirect(url_for('main.index'))
+    return render_template('changing_group.html', title='Changing group', form=form)
 
 
+@main.route("/delete_group", methods=['GET', 'POST'])
+@login_required
+def delete_group():
+    group = Group.query.get_or_404(current_user.default_group_id)
+    if group.group_admin != current_user.id:
+        abort(403)
+        return redirect(url_for('main.profile'))
+    db.session.delete(group)
+    db.session.commit()
+    flash('Group has been deleted!', 'success')
+    return redirect(url_for('main.profile'))
+
+
+# @main.route('/myGroups', methods=['POST', 'GET'])
+# @login_required
+# def my_groups():
+#     grouplist = Group.query.filter_by(group_admin=current_user.id).all()
+#     return render_template('grouplist.html', title='My Groups', list=grouplist)
