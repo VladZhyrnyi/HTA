@@ -19,13 +19,15 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
+        {% if current_user.default_group_id %}
         <p>
             {{ form.executor.label }}<br>
-            {{ form.executor(size=32) }}
+            {{ form.executor() }}
              {% for error in form.executor.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
+        {% endif %}
         <p>
             {{ form.priority.label }}<br>
             {{ form.priority() }}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="col-md-4 col-md-offset-4">
+        <h1 class="title text-center">
+            Please choose group:
+        </h1>
+        <form action="/change_group" class="text-center" method="POST">
+        {{ form.hidden_tag() }}
+            <p>
+                {{ form.group() }}
+                {% for error in form.group.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
+    </div>
+</div>
+{% endblock %}

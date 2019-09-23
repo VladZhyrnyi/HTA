@@ -1,16 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Create Group</h1>
-    <form action="/crt_grp" style="border:2" method="POST">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.groupname.label }}<br>
-            {{ form.groupname(size=32) }}
-            {% for error in form.groupname.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
+<div class="container">
+    <div class="text-center">
+        <h1>Create Group</h1>
+        <form action="/crt_grp" style="border:2" method="POST">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.groupname.label }}<br>
+                {{ form.groupname(size=32) }}
+                {% for error in form.groupname.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
+    </div>
+</div>
 {% endblock %}

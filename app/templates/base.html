@@ -30,7 +30,10 @@
                     <li><a href="{{ url_for('main.index') }}"> HOME </a></li>
                     {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('main.create_group') }}">Create Group</a></li>
-                    <li><a href="{{ url_for('main.my_groups') }}">My groups</a></li>
+                    <li><a href="{{ url_for('main.change_group') }}">Change group</a></li>
+                    {% if current_user.default_group_id %}
+                    <li><a href="{{ url_for('main.delete_group') }}">Delete group</a></li>
+                    {% endif %}
                     <li><a href="{{ url_for('main.create_task') }}"> Create Task</a></li>
                     <li><a href="{{ url_for('auth.logout') }}">Log out</a></li>
                     {% endif %}
